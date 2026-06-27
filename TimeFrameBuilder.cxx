@@ -479,11 +479,11 @@ bool TimeFrameBuilder::ConditionalRun()
                 << now
                 << " TFB Successful Ratio: "
                 << std::to_string(successfulRatio) << std::endl;
-            #endif
             fDbMetric->ts_add(
                 fKeyPrefixMetric + "SuccessfulRatio",
                 std::to_string(std::time(nullptr) * 1000),
                 std::to_string(successfulRatio));
+            #endif
 
             fNumSccesssfulTFB = 0;
             fNumFailedTFB     = 0;
@@ -603,7 +603,7 @@ void TimeFrameBuilder::InitTask()
     fOutputIncompleteTF = ((sOutputIncompleteTF == "1") || (sOutputIncompleteTF == "true") || (sOutputIncompleteTF == "yes"));
     LOG(debug) << " output-incomplete-tf = " << fOutputIncompleteTF;
 
-    SetKeyPrefix();
+    // SetKeyPrefix();
 
 }
 

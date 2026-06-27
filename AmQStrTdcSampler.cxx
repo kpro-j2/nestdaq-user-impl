@@ -1,7 +1,7 @@
 #include <vector>
-#include <chrono>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 #include <fairmq/runDevice.h>
 
@@ -40,14 +40,11 @@ AmQStrTdcSampler::AmQStrTdcSampler()
 //______________________________________________________________________________
 bool AmQStrTdcSampler::ConditionalRun()
 {
-    using namespace std::chrono_literals;
-
-    //    int n_word = 0;
-    int recv_status = 0;
     int num_recieved_bytes = 0;
     int n_word = 0;
     uint8_t* buffer = new uint8_t[kOutBufByte*fnWordPerCycle] {};
 
+    int recv_status = 0;
     while( -1 == ( recv_status = Event_Cycle(buffer, num_recieved_bytes))) {
         if (NewStatePending()) {
             break;
@@ -260,7 +257,9 @@ void AmQStrTdcSampler::InitTask()
 void AmQStrTdcSampler::PreRun()
 {
 
-    if(-1 == (fAmqSocket = ConnectSocket(fIpSiTCP.c_str()))) return;
+    if(-1 == (fAmqSocket = ConnectSocket(fIpSiTCP.c_str()))) {
+        return;
+    }
     LOG(info) << "TCP connected";
 
     /*

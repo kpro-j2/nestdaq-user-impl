@@ -319,6 +319,63 @@ install(TARGETS
     RUNTIME DESTINATION ${PROJECT_INSTALL_BINDIR}
 )
 
+#==============================================================================
+# GeneratorAmQStrTdc (heartbeat/data generator without frontend)
+#==============================================================================
+add_executable(GeneratorAmQStrTdc
+    GeneratorAmQStrTdc.cxx;
+)
+
+target_include_directories(GeneratorAmQStrTdc PUBLIC
+    ${Boost_INCLUDE_DIRS};
+    ${FairLogger_INCDIR};
+    ${FairMQ_INCDIR};
+    ${CMAKE_SOURCE_DIR};
+)
+
+target_link_directories(GeneratorAmQStrTdc PUBLIC
+    ${Boost_LIBRARY_DIRS};
+    ${FairLogger_LIBDIR};
+    ${FairMQ_LIBDIR};
+)
+
+if ((FairMQ_VERSION VERSION_GREATER_EQUAL 1.8.0)
+  AND (FairMQ_VERSION VERSION_LESS_EQUAL 1.8.9))
+  target_link_libraries(GeneratorAmQStrTdc PUBLIC
+    fairmq;
+    FairLogger;
+    ${Boost_LIBRARIES};
+    Utility;
+    sqlite3;
+  )
+elseif (((FairMQ_VERSION VERSION_GREATER_EQUAL 1.4.55)
+  AND (FairMQ_VERSION VERSION_LESS_EQUAL 1.4.56))
+  OR (FairMQ_VERSION VERSION_EQUAL 1.5.0))
+  target_link_libraries(GeneratorAmQStrTdc PUBLIC
+    FairMQ;
+    FairMQStateMachine;
+    FairLogger;
+    ${Boost_LIBRARIES};
+    Utility;
+    sqlite3;
+  )
+elseif((FairMQ_VERSION VERSION_EQUAL 1.10.0))
+  target_link_libraries(GeneratorAmQStrTdc PUBLIC
+    fairmq;
+    FairLogger;
+    ${Boost_LIBRARIES};
+    Utility;
+    sqlite3;
+  )
+else()
+    message(FATAL_ERROR "Unsupported FairMQ version ${FairMQ_VERSION}")
+endif()
+
+install(TARGETS
+    GeneratorAmQStrTdc
+    RUNTIME DESTINATION ${PROJECT_INSTALL_BINDIR}
+)
+
 
 #
 #
